@@ -1,0 +1,16 @@
+{
+  "name": "native-server",
+  "version": "1.0.0",
+  "description": "Node.js server without Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
