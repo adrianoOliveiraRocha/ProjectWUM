@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
     filePath = '/views/index.html';
   } else if(filePath === '/about') {
     filePath = '/views/about.html';
-  }
+  } 
   
   const fullPath = path.join(__dirname, 'public', filePath);
   const extname = path.extname(fullPath);
