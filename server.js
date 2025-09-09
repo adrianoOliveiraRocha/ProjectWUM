@@ -1,8 +1,35 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const querystring = require('querystring');
 
 const server = http.createServer((req, res) => {
+  // Se for uma requisição POST
+  if (req.method === 'POST' && req.url === '/submit-form') {
+    let body = '';
+    
+    // Coletar os dados da requisição
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+    
+    // Quando todos os dados forem recebidos
+    req.on('end', () => {
+      // Parse dos dados do formulário
+      const formData = querystring.parse(body);
+      const name = formData.name;
+      
+      console.log('Nome recebido:', name);
+      
+      // Responder ao cliente
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(`<h1>Obrigado, ${name}! Seu formulário foi recebido.</h1>`);
+    });
+    
+    return;
+  }
+  
+  // Restante do código para servir arquivos estáticos (GET)
   // Remove query parameters
   let filePath = req.url.split('?')[0];
   
@@ -11,7 +38,9 @@ const server = http.createServer((req, res) => {
     filePath = '/views/index.html';
   } else if(filePath === '/about') {
     filePath = '/views/about.html';
-  } 
+  } else if(filePath === '/call-form.html') {
+    filePath = '/views/form.html'
+  }
   
   const fullPath = path.join(__dirname, 'public', filePath);
   const extname = path.extname(fullPath);
