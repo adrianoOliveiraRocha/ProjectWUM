@@ -38,7 +38,7 @@ const server = http.createServer((req, res) => {
     filePath = '/views/index.html';
   } else if(filePath === '/about') {
     filePath = '/views/about.html';
-  } else if(filePath === '/call-form.html') {
+  } else if(filePath === '/form') {
     filePath = '/views/form.html'
   }
   
