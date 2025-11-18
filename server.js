@@ -4,48 +4,43 @@ const path = require('path');
 const querystring = require('querystring');
 
 const server = http.createServer((req, res) => {
-  // Se for uma requisição POST
+  let rout = req.url.split('?')[0];
+  let filePath = '';
   if (req.method === 'POST') {
-    // /submit-form
-    if (req.url === '/submit-form') {
+    if (rout === '/submit-form') {
+      filePath = '/views/success.html';
       let body = '';
       // Coletar os dados da requisição
       req.on('data', chunk => {
         body += chunk.toString();
-      });
-      
+      });      
       // Quando todos os dados forem recebidos
       req.on('end', () => {
         const formData = querystring.parse(body);
+        console.log(formData);
         const name = formData.name;
         
         // Ler o arquivo HTML template
-        fs.readFile(path.join(__dirname, 'public', 'views', 'success.html'), 'utf8', (err, html) => {
+        fs.readFile(path.join(__dirname, 'public', filePath), 'utf-8', 
+        (err, html) => {
           if (err) {
             res.writeHead(500);
             res.end('Erro ao carregar a página');
             return;
-          }
-          
+          }          
           // Substituir placeholder pelo nome
-          const renderedHtml = html.replace('{{name}}', name);
-          
+          const renderedHtml = html.replace('{{name}}', name);          
           res.writeHead(200, { 'Content-Type': 'text/html' });
           res.end(renderedHtml);
         });
       });
     }
   } else if (req.method === 'GET') {
-    // Restante do código para servir arquivos estáticos (GET)
-    // Remove query parameters
-    let filePath = req.url.split('?')[0];
-    
-    // Default to index.html for root
-    if (filePath === '/') {
+    if (rout === '/') {
       filePath = '/views/index.html';
-    } else if (filePath === '/about') {
+    } else if (rout === '/about') {
       filePath = '/views/about.html';
-    } else if (filePath === '/form') {
+    } else if (rout === '/form') {
       filePath = '/views/form.html';
     }
     
@@ -59,7 +54,7 @@ const server = http.createServer((req, res) => {
       '.js': 'application/javascript',
       '.json': 'application/json',
       '.png': 'image/png',
-      '.jpg': 'image/jpeg'
+      '.jpg': 'image/jpeg',
     };
     
     fs.readFile(fullPath, (err, data) => {
