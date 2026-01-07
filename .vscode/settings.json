@@ -1,0 +1,14 @@
+{
+  "editor.fontSize": 18,
+  "editor.cursorStyle": "block",
+  "editor.tabSize": 2,
+  "editor.minimap.enabled": false,
+  "workbench.sideBar.location": "left",
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  },
+  "workbench.colorTheme": "Visual Studio Light"
+}
