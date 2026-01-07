@@ -36,12 +36,16 @@ const server = http.createServer((req, res) => {
       });
     }
   } else if (req.method === 'GET') {
+    // Check for specific HTML routes first
     if (rout === '/') {
       filePath = '/views/index.html';
     } else if (rout === '/about') {
       filePath = '/views/about.html';
     } else if (rout === '/form') {
       filePath = '/views/form.html';
+    } else {
+      // Assume it's a static file (like CSS) and use the request URL directly
+      filePath = req.url;
     }
     
     const fullPath = path.join(__dirname, 'public', filePath);
@@ -75,4 +79,4 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(3000);
+server.listen(8000);
