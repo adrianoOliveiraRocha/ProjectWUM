@@ -2,6 +2,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
+const renderPage = require('./adr_modules/renderPage');
+
 
 const server = http.createServer((req, res) => {
   const baseURL = `http://${req.headers.host}/`;
@@ -17,52 +19,31 @@ const server = http.createServer((req, res) => {
     '.jpg': 'image/jpeg',
   };
 
-  /**
-   * Helper function to read a page and inject the menu.html content
-   */
-  const renderPage = (res, pagePath, replacements = {}) => {
-    const menuPath = path.join(__dirname, 'public', 'views', 'core', 'include', 'menu.html');
-
-    // 1. Read the Menu
-    fs.readFile(menuPath, 'utf-8', (menuErr, menuHtml) => {
-      if (menuErr) {
-        res.writeHead(500);
-        return res.end('Error loading menu component');
-      }
-
-      // 2. Read the requested Page
-      fs.readFile(pagePath, 'utf-8', (pageErr, pageHtml) => {
-        if (pageErr) {
-          res.writeHead(404);
-          return res.end('Page not found');
-        }
-
-        // 3. Perform injections
-        let finalHtml = pageHtml.replace('{{MENU}}', menuHtml);
-        
-        // Handle any additional dynamic data (like {{name}} in success.html)
-        for (const [key, value] of Object.entries(replacements)) {
-          finalHtml = finalHtml.replace(`{{${key}}}`, value);
-        }
-
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(finalHtml);
-      });
-    });
-  };
-
   // --- POST ROUTES ---
-  if (req.method === 'POST' && rout === '/submit-form') {
-    let body = '';
-    req.on('data', chunk => { body += chunk.toString(); });
-    req.on('end', () => {
-      const formData = querystring.parse(body);
-      const name = formData.name || 'Guest';
-      const successPath = path.join(__dirname, 'public', 'views', 'core', 'success.html');
-      
-      // Render success page with both Menu and Name injection
-      renderPage(res, successPath, { name: name });
-    });
+  if (req.method === 'POST') {
+    if(rout === '/submit-form') {
+      let body = '';
+      req.on('data', chunk => { body += chunk.toString(); });
+      req.on('end', () => {
+        const formData = querystring.parse(body);
+        const name = formData.name || 'Guest';
+        const successPath = path.join(__dirname, 'public', 'views', 'core', 'success.html');
+        
+        // Render success page with both Menu and Name injection
+        renderPage(res, successPath, { name: name });
+      });
+    } else if(rout === '/your-job') {
+      let body = '';
+      req.on('data', chunk => { body += chunk.toString(); });
+      req.on('end', () => {
+        const formData = querystring.parse(body);
+        const job = formData.job || 'Guest';
+        const successPath = path.join(__dirname, 'public', 'views', 'core', 'my-job.html');
+        
+        // Render success page with both Menu and Name injection
+        renderPage(res, successPath, { job: job });
+      });
+    }  
   } 
   
   // --- GET ROUTES ---
