@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
 const renderPage = require('./adr_modules/renderPage');
+// const coreRout = require('./app/routs/core.router');
 
 
 const server = http.createServer((req, res) => {
@@ -19,7 +20,7 @@ const server = http.createServer((req, res) => {
     '.jpg': 'image/jpeg',
   };
 
-  // --- POST ROUTES ---
+  /*
   if (req.method === 'POST') {
     if(rout === '/submit-form') {
       let body = '';
@@ -45,7 +46,7 @@ const server = http.createServer((req, res) => {
       });
     }  
   } 
-  
+
   // --- GET ROUTES ---
   else if (req.method === 'GET') {
     let filePath = '';
@@ -87,7 +88,7 @@ const server = http.createServer((req, res) => {
   } else {
     res.writeHead(405);
     res.end('Method not allowed');
-  }
+  }*/
 });
 
 server.listen(8000, () => {
