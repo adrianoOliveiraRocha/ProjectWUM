@@ -63,25 +63,25 @@ function serveStatic(res, filePath) {
 
 function renderHtml(res, filePath, data = {}) {
   const fullPath = path.join(__dirname, '..', 'public', filePath);
-  console.log(__dirname)
-  console.log(filePath)
-  console.log(fullPath)
   renderPage(res, fullPath, data);
 }
 
-// HTML Routes
+// GET Routes
 routes.GET['/'] = (req, res) => renderHtml(res, '/views/core/index.html');
+routes.GET['/data-table'] = (req, res) => renderHtml(res, '/views/core/datt.html');
 routes.GET['/about'] = (req, res) => renderHtml(res, '/views/core/about.html');
 routes.GET['/form'] = (req, res) => renderHtml(res, '/views/core/form.html');
 
 // POST Routes
-routes.POST['/submit-form'] = (req, res) => {
+
+routes.POST['/your-name'] = (req, res) => {
   let body = '';
   req.on('data', chunk => { body += chunk.toString(); });
   req.on('end', () => {
     const formData = querystring.parse(body);
     const name = formData.name || 'Guest';
-    renderHtml(res, '/views/core/success.html', { name: name });
+    let test = "<h1 style='color: red'>"+name+"</h1>"
+    renderHtml(res, '/views/core/success.html', { name: test });
   });
 };
 
