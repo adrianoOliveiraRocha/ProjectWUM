@@ -27,6 +27,7 @@ const routes = {
 
 // Smart static file server that checks if file exists in public directory
 function serveStatic(res, filePath) {
+  // console.log(filePath)
   // Remove query parameters
   const cleanPath = filePath.split('?')[0];
   
@@ -68,36 +69,30 @@ function renderHtml(res, filePath, data = {}) {
 
 // GET Routes
 routes.GET['/'] = (req, res) => renderHtml(res, '/views/core/index.html');
-routes.GET['/data-table'] = (req, res) => renderHtml(res, '/views/core/datt.html');
+routes.GET['/data-table'] = (req, res) => renderHtml(res, '/views/core/data-table.html');
 routes.GET['/about'] = (req, res) => renderHtml(res, '/views/core/about.html');
 routes.GET['/form'] = (req, res) => renderHtml(res, '/views/core/form.html');
 
 // POST Routes
 
-routes.POST['/your-name'] = (req, res) => {
+routes.POST['/complete-data'] = (req, res) => {
   let body = '';
-  req.on('data', chunk => { body += chunk.toString(); });
+  req.on('data', chunk => {body += chunk.toString(); });
   req.on('end', () => {
     const formData = querystring.parse(body);
     const name = formData.name || 'Guest';
-    let test = "<h1 style='color: red'>"+name+"</h1>"
-    renderHtml(res, '/views/core/success.html', { name: test });
-  });
-};
-
-routes.POST['/your-job'] = (req, res) => {
-  let body = '';
-  req.on('data', chunk => { body += chunk.toString(); });
-  req.on('end', () => {
-    const formData = querystring.parse(body);
     const job = formData.job || 'Guest';
-    renderHtml(res, '/views/core/my-job.html', { job: job });
-  });
-};
+    const data = `
+    <p> Name: ${name} </p>
+    <p> Job: ${job} </p>`;
+    renderHtml(res, '/views/core/success.html', {data: data});
+  })
+}
 
 function handleRoute(req, res) {
   const baseURL = `http://${req.headers.host}/`;
   const parsedUrl = new URL(req.url, baseURL);
+  console.log(req.headers)
   const route = parsedUrl.pathname;
   const method = req.method;
 
