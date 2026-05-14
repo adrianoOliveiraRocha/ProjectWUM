@@ -92,7 +92,6 @@ routes.POST['/complete-data'] = (req, res) => {
 function handleRoute(req, res) {
   const baseURL = `http://${req.headers.host}/`;
   const parsedUrl = new URL(req.url, baseURL);
-  console.log(req.headers)
   const route = parsedUrl.pathname;
   const method = req.method;
 

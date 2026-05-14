@@ -1,0 +1,1 @@
+Trying unferstand how the function serveStatic know where is the static files -js and css-;
